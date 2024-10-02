@@ -5,19 +5,27 @@ resource "google_compute_instance" "default" {
 
   boot_disk {
     initialize_params {
-      image = var.image   
+      image = data.google_compute_image.debian.self_link
     }
   }
 
   network_interface {
-    network = var.network_name   
+    network = "default"
+    access_config {
+      # Ephemeral IP
+    }
   }
+}
 
-  # Add metadata or tags if required
-  metadata = {
-    foo = "bar"
-  }
+output "instance_external_ip" {
+  value = google_compute_instance.default.network_interface[0].access_config[0].nat_ip
+}
 
-  # Or tags
-  tags = ["foo", "bar"]
+output "instance_self_link" {
+  value = google_compute_instance.default.self_link
+}
+
+data "google_compute_image" "debian" {
+  family  = "debian-11"
+  project = "debian-cloud"
 }
