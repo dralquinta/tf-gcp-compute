@@ -20,12 +20,3 @@ resource "google_compute_instance" "default" {
 output "instance_external_ip" {
   value = google_compute_instance.default.network_interface[0].access_config[0].nat_ip
 }
-
-output "instance_self_link" {
-  value = google_compute_instance.default.self_link
-}
-
-data "google_compute_image" "debian" {
-  family  = "debian-11"
-  project = "debian-cloud"
-}
